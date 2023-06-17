@@ -14,18 +14,44 @@ class tableController extends Controller
     public function index_transaksi()
     {
         $transaksi = DB::table('transaksi')
-        ->select('transaksi.id_transaksi','studio.no_studio', 'transaksi.nama_band', 'users.name', 'transaksi.tanggal_transaksi', 'transaksi.total_harga')
+        ->select('transaksi.id_transaksi','studio.no_studio', 'transaksi.nama_band','transaksi.jam_mulai', 'users.name', 'transaksi.tanggal_transaksi')
         ->join('studio','studio.id_studio','=','transaksi.id_studio')
         ->join('users','transaksi.id','=','users.id')
         ->get();
         
-        $booking = DB::table('booking')->get();
+        $studio = DB::table('studio')->get();
 
         return view('table.transaksi',[
             'data'=> $transaksi,
-            'booking' => $booking,
+            'studio' => $studio,
             'tittle' => "transaksi"
         ]);
+    }
+
+    public function main_transaksi_tambah(Request $req)
+    {   
+        $transaksi = DB::table('transaksi')
+        ->select('transaksi.id_transaksi','studio.no_studio', 'transaksi.nama_band','transaksi.jam_mulai', 'users.name', 'transaksi.tanggal_transaksi')
+        ->join('studio','studio.id_studio','=','transaksi.id_studio')
+        ->join('users','transaksi.id','=','users.id')
+        ->get();
+        
+        $studio = DB::table('studio')->get();
+
+        $err = DB::select("CALL transaksi_collison(?,?,?,?)",[$req->studio,$req->nama_band,$req->petugas,$req->jam]);
+        
+        if($err)
+        {
+            return view('table.transaksi',[
+                'error' => $err,
+                'data'=> $transaksi,
+                'studio' => $studio,
+                'tittle' => "transaksi"
+            ]);
+        } else {
+            DB::statement("CALL transaksi_collison(?,?,?,?)",[$req->studio,$req->nama_band,$req->petugas,$req->jam]);
+            return redirect('/transaksi');
+        }
     }
 
     public function index_booking()
@@ -36,8 +62,11 @@ class tableController extends Controller
         ->join('users','booking.id_petugas','=','users.id')
         ->get();
 
+        $studio = DB::table('studio')->get();
+
         return view('table.booking',[
             'data' => $booking,
+            'studio' => $studio,
             'tittle' => 'booking'
         ]);
     }

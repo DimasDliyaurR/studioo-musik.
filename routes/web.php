@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
         
         // Table Transaksi
         Route::get('transaksi','index_transaksi')->name('transaksi');
+        Route::post('insert-transaksi','main_transaksi_tambah')->name('transaksi.insert');
         
         Route::get('booking','index_booking')->name('booking');
 

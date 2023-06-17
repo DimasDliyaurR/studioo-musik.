@@ -15,12 +15,12 @@
                                     clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <input type="text" id="table-search"
+                        <input type="text"
                             class="block p-2 pl-10 text-sm border border-white rounded-lg w-80 bg-white focus:ring-primary focus:border-primary light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 text-black light:focus:ring-primary light:focus:border-primary"
-                            placeholder="Search for items">
+                            placeholder="Search for items" id="myInput">
                     </div>
                 </div>
-                <div class="bg-gray-500">
+                <div class="overflow-y-auto h-[70%]">
                     <table class="w-full text-sm text-left text-gray-500 light:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 light:bg-gray-700 light:text-gray-400">
 
@@ -32,20 +32,23 @@
                                     no studio
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                    Nama Band
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     petugas
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     tanggal
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    total harga
+                                    jam
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Action
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="myTable">
                             @foreach ($data as $dt)
                                 <tr class="bg-white border-b light:bg-gray-900 light:border-gray-700">
                                     <td scope="row"
@@ -56,13 +59,16 @@
                                         {{ $dt->no_studio }}
                                     </td>
                                     <td class="px-6 py-4">
+                                        {{ $dt->nama_band }}
+                                    </td>
+                                    <td class="px-6 py-4">
                                         {{ $dt->name }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $dt->tanggal_transaksi }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $dt->total_harga }}
+                                        {{ $dt->jam_mulai }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="dropdown">
@@ -70,15 +76,10 @@
                                                 data-bs-toggle="dropdown">
                                                 <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
-                                            <div class="dropdown-menu d-absolute z-3">
-                                                <a class="dropdown-item"
-                                                    href="/dashboard/edit-produk/{{ $dt->id_transaksi }}"><i
-                                                        class="bx bx-edit-alt me-1"></i> Edit</a>
-
-                                                <a class="dropdown-item"
-                                                    href="lihat-produk/dltProduk/{{ $dt->id_transaksi }}"><i
-                                                        class="bx bx-trash me-1"></i> Delete</a>
-                                            </div>
+                                            <a class="dropdown-item"
+                                                href="lihat-produk/dltProduk/{{ $dt->id_transaksi }}"><i
+                                                    class="bx bx-trash me-1"></i> Delete</a>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -87,34 +88,44 @@
                 </div>
             </div>
             <div class="flex flex-col w-[30%] my-10 mx-20">
-                <p class="text-center font-semibold uppercase text-3xl">Tambah transaksi</p>
-                <div class="my-5 flex flex-col">
-                    <label for="booking">Booking</label>
-                    <select class="w-full rounded-xl hover:ring-button placeholder:ring-button my-5" name="booking"
-                        placeholder="Masukkan">
-                        <option selected hidden>Pilih value</option>
-                        @foreach ($booking as $dt)
-                            <option value="{{ $dt->id_booking }}">
-                                {{ $dt->nama_pembooking . ' | ' . $dt->tanggal . ' | ' . $dt->jam }}</option>
+                <form action="insert-transaksi" method="POST">
+                    @csrf
+                    <p class="text-center font-semibold uppercase text-3xl">Tambah transaksi</p>
+                    <div class="my-5 flex flex-col">
+                        <label for="booking">Studio</label>
+                        <select class="w-full rounded-xl hover:ring-button placeholder:ring-button my-5" name="studio"
+                            placeholder="Masukkan studio" type="text">
+                            @foreach ($studio as $item => $pd)
+                                <option value="{{ $pd->no_studio }}">{{ $pd->no_studio }}</option>
+                            @endforeach
+                        </select>
+                        <input type="text" name="petugas" value="{{ Auth::user()->name }}" hidden>
+                        <label for="nama_band">Nama Band</label>
+                        <div class="flex flex-col">
+                            <input type="text" class="w-full rounded-xl hover:ring-button placeholder:ring-button my-5"
+                                name="nama_band" placeholder="Masukkan">
+                        </div>
+                        <label for="jam">Jam</label>
+                        <div class="flex flex-col">
+                            <input type="time" class="w-full rounded-xl hover:ring-button placeholder:ring-button my-5"
+                                name="jam" placeholder="Masukkan">
+                        </div>
+
+
+                        <button
+                            class="w-full rounded-xl bg-button hover:bg-emerald-200 placeholder:ring-button my-5 p-2">Submit</button>
+                </form>
+                @if (Route::has('transaksi.insert'))
+                    @isset($error)
+                        @foreach ($error as $key => $err)
+                            {{ $err->error }}
                         @endforeach
-                    </select>
-                    <label for="nama_band">Nama Band</label>
-                    <div class="flex flex-col">
-                        <input type="text" class="w-full rounded-xl hover:ring-button placeholder:ring-button my-5"
-                            name="nama_band" placeholder="Masukkan">
-                    </div>
-                    <label for="jam">Jam</label>
-                    <div class="flex flex-col">
-                        <input type="time" class="w-full rounded-xl hover:ring-button placeholder:ring-button my-5"
-                            name="jam" placeholder="Masukkan">
-                    </div>
-
-                    <button
-                        class="w-full rounded-xl bg-button hover:bg-emerald-200 placeholder:ring-button my-5 p-2">Submit</button>
-                </div>
-
+                    @endisset
+                @endif
             </div>
 
         </div>
+
+    </div>
     </div>
 @endsection

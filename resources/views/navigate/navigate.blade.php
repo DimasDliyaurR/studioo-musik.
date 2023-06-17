@@ -16,12 +16,14 @@
     <!-- Scripts -->
     @routes
     @vite(['resources/js/app.js'])
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
 
 <body>
     @auth
         <div class="flex">
             <div class="h-screen w-[16rem] bg-primary flex flex-col items-center">
+                <p class="">Nama Admin : {{ Auth::user()->name }}</p>
                 <div class="my-[6rem]">
 
                     <span class="text-green-300 text-3xl">
@@ -30,15 +32,15 @@
                 </div>
                 <a href="{{ asset('transaksi') }}">
                     <div
-                        class="h-[2.5rem] w-[14rem] rounded-md {{ $tittle == 'transaksi' ? 'bg-button' : '' }} hover:bg-[#85B449] hover:text-white text-center  flex flex-row items-center p-4 my-3">
-                        <i class="fa fa-book text-sm mx-[10px]"></i>
+                        class="h-[2.5rem] w-[14rem] rounded-md {{ $tittle == 'transaksi' ? 'bg-[#85B449] text-white' : '' }} hover:bg-[#85B449] hover:text-white text-center  flex flex-row items-center p-4 my-3">
+                        <i class="fa fa-money text-sm mx-[10px]"></i>
                         <span class="text-[1.5rem]">Transaksi</span>
                     </div>
                 </a>
 
                 <a href="{{ asset('booking') }}">
                     <div
-                        class="h-[2.5rem] w-[14rem] rounded-md {{ $tittle == 'booking' ? 'bg-button' : '' }} hover:bg-[#85B449] hover:text-white text-center  flex flex-row items-center p-4 my-3">
+                        class="h-[2.5rem] w-[14rem] rounded-md {{ $tittle == 'booking' ? 'bg-[#85B449] text-white' : '' }} hover:bg-[#85B449] hover:text-white text-center  flex flex-row items-center p-4 my-3">
                         <i class="fa fa-book text-sm mx-[10px]"></i>
                         <span class="text-[1.5rem]">Booking</span>
                     </div>
@@ -46,7 +48,7 @@
 
                 <a href="{{ asset('studio') }}"">
                     <div
-                        class="h-[2.5rem] w-[14rem] rounded-md {{ $tittle == 'studio' ? 'bg-button' : '' }} hover:bg-[#85B449] hover:text-white text-center  flex flex-row items-center p-4 my-3">
+                        class="h-[2.5rem] w-[14rem] rounded-md {{ $tittle == 'studio' ? 'bg-[#85B449] text-white' : '' }} hover:bg-[#85B449] hover:text-white text-center  flex flex-row items-center p-4 my-3">
                         <i class="fa fa-camera text-sm mx-[10px]"></i>
                         <span class="text-[1.5rem]">Studio</span>
                     </div>
@@ -54,7 +56,7 @@
 
                 <a href="{{ asset('inventaris') }}">
                     <div
-                        class="h-[2.5rem] w-[14rem] rounded-md {{ $tittle == 'inventaris' ? 'bg-button' : '' }} hover:bg-[#85B449] hover:text-white text-center  flex flex-row items-center p-4 my-3">
+                        class="h-[2.5rem] w-[14rem] rounded-md {{ $tittle == 'inventaris' ? 'bg-[#85B449] text-white' : '' }} hover:bg-[#85B449] hover:text-white text-center  flex flex-row items-center p-4 my-3">
                         <i class="fa fa-briefcase text-sm mx-[10px]"></i>
                         <span class="text-[1.5rem]">Inventaris</span>
                     </div>
@@ -95,6 +97,19 @@
 
     <!-- Page JS -->
     <script src="/assets/js/dashboards-analytics.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+        // Navigator
+    </script>
 </body>
 </body>
 

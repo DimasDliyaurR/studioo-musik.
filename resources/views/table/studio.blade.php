@@ -15,12 +15,12 @@
                                     clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <input type="text" id="table-search"
+                        <input type="text" id="myInput"
                             class="block p-2 pl-10 text-sm border border-white rounded-lg w-80 bg-white focus:ring-primary focus:border-primary light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 text-black light:focus:ring-primary light:focus:border-primary"
                             placeholder="Search for items">
                     </div>
                 </div>
-                <div class="bg-gray-500">
+                <div class="overflow-y-auto h-[70%]">
                     <table class="w-full text-sm text-left text-gray-500 light:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 light:bg-gray-700 light:text-gray-400">
 
@@ -42,7 +42,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="myTable">
                             @foreach ($data as $dt)
                                 <tr class="bg-white border-b light:bg-gray-900 light:border-gray-700">
                                     <td scope="row"
@@ -65,10 +65,6 @@
                                                 <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu d-absolute z-3">
-                                                <a class="dropdown-item"
-                                                    href="/dashboard/edit-produk/{{ $dt->id_studio }}"><i
-                                                        class="bx bx-edit-alt me-1"></i> Edit</a>
-
                                                 <a class="dropdown-item"
                                                     href="lihat-produk/dltProduk/{{ $dt->id_studio }}"><i
                                                         class="bx bx-trash me-1"></i> Delete</a>
